@@ -1,0 +1,17 @@
+*.zip
+*.exe
+
+vendor/
+.idea/
+logs/
+
+*/.DS_Store
+*/.idea/
+*/.sass-cache/
+*/.npm/
+*/.nyc_output/
+*/.node_repl_history
+*/yarn-error.log
+*/yarn-debug.log
+*/node_modules/
+*/dist/
