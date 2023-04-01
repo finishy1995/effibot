@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  effibot:
+    image: finishy/effibot:latest
+    ports:
+      - "4001:4001"
+    networks:
+      - effibot
+    volumes:
+      - ./effibot_config:/app/etc
+  effibot-demo:
+    image: finishy/effibot-demo:latest
+    ports:
+      - "4000:4000"
+    networks:
+      - effibot
+    depends_on:
+      - effibot
+networks:
+  effibot:
+    driver: bridge

@@ -2,7 +2,7 @@
 
 [English](./README.md) | [中文](./README_CN.md)
 
-ChatGPT 服务器，基于树的数据结构存储处理数据，给用户提供思维导图般使用 ChatGPT 的问答体验。
+Effibot 是一个 ChatGPT 服务器应用，基于树的数据结构存储处理数据，给用户提供思维导图般使用 ChatGPT 的问答体验。
 树的结构能够极大程度优化上下文的传输量（token），在公司内部使用，可以提供更好的体验。
 
 ![Demo](docs/demo.png)
@@ -21,11 +21,13 @@ ChatGPT 服务器，基于树的数据结构存储处理数据，给用户提供
 
 [43.206.107.75:4000](http://43.206.107.75:4000)
 
+Demo 环境未设置 OpenAI Token。
+
 ## 📢更新计划
 
 - [ ] 用户登录
 - [ ] 数据持久化存储
-- [ ] 快速部署脚本
+- [x] 快速部署脚本、镜像打包上传
 - [ ] 加入写长篇小说的场景
 
 **随缘更新**，用的人多就更新，用的人少就看心情更新。
@@ -45,29 +47,32 @@ ChatGPT 服务器，基于树的数据结构存储处理数据，给用户提供
 
 ![Knowledge](docs/knowledge.png)
 
-## 部署使用
-
-### 环境须知
+## 部署环境须知
 建议服务器地址选择 OpenAI 支持的国家或地区。机房和云主机均可，下述云经过测试：
 1. Azure
 2. AWS
 
-如果非要在不支持的国家或地区测试，本项目完全支持代理，但是代理本身可能会**影响体验和存在风险**。
-配置方式详见配置文件 Spec.GPT.TransportUrl。  
+如果非要在不支持的国家或地区测试，本项目完全支持代理，但是代理本身可能会 **影响体验和存在风险** 。
+配置方式详见配置文件 Spec.GPT.TransportUrl。
 
 不推荐使用代理的方式。风险自负。
 
-### 服务器部署
-
-确保 golang 1.18+ 已安装。
+## 克隆并进入项目目录
 
 ```bash
-cd http
-go run http.go # go build http.go && ./http
+git clone https://github.com/finishy1995/effibot.git
+cd effibot
 ```
 
-默认配置为 Mock 模式，即不会真正调用 GPT API，而是返回用户的输入作为回复。
+## 配置文件设置
+
+默认配置为 `Mock` 模式，即不会真正调用 GPT API，而是返回用户的输入作为回复。  
+
 默认 REST API 端口为 `4001`，配置均可在 `http/etc/http-api.yaml` 中修改。
+
+```bash
+vi http/etc/http-api.yaml
+```
 
 ```yaml
 Name: http-api
@@ -86,6 +91,46 @@ Spec:
     MaxToken: 1000 # Max token of OpenAI response, default 1000
 ```
 
+修改文件后，如果需要`一键部署`或使用`容器部署`，请执行如下命令
+```bash
+mkdir -p ./effibot_config
+cp http/etc/http-api.yaml ./effibot_config
+```
+
+## 一键部署
+
+确保 docker、docker-compose 已正确安装并启用。
+
+```bash
+docker-compose up -d
+```
+
+Demo 客户端将会运行在 `4000` 端口，REST API 将会运行在 `4000` 和 `4001` 端口。
+
+如果你没有 docker-compose，可以使用如下命令：
+
+```bash
+docker network create effibot
+docker run -p 4001:4001 -v ./effibot_config:/app/etc --network effibot --name effibot -d finishy/effibot:latest
+docker run -p 4000:4000 --network effibot --name effibot-demo -d finishy/effibot-demo:latest
+```
+
+## 自定义开发/部署
+
+### 服务器
+
+确保 golang 1.18+ 已安装。
+
+```bash
+cd http
+go run http.go # go build http.go && ./http
+```
+
+退出目录
+```bash
+cd ..
+```
+
 ### 容器打包
 
 ```bash
@@ -101,10 +146,8 @@ docker network create effibot
 ### 容器部署
 
 ```bash
-mkdir -p /effibot_config
-cp http/etc/http-api.yaml /effibot_config
 # Modify the configuration file as needed, such as adding the OpenAI token and change the log mode to console
-docker run -p 4001:4001 -v /effibot_config:/app/etc --network effibot --name effibot -d effibot:latest
+docker run -p 4001:4001 -v ./effibot_config:/app/etc --network effibot --name effibot -d effibot:latest
 ```
 
 ### Demo 客户端容器打包
@@ -121,9 +164,11 @@ docker run -p 4000:4000 --network effibot --name effibot-demo -d effibot-demo:la
 
 ### Demo 客户端开发
 
-The Demo client will automatically open at [http://localhost:5173](http://localhost:5173).
+Demo 客户端由 Vue.js + Vite + TypeScript 开发，需要 Node.js 14+ 环境。
 
 ```bash
 cd demo
 yarn && yarn dev
 ```
+
+Demo 客户端对自动打开在 [http://localhost:5173](http://localhost:5173).

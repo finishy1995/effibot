@@ -23,11 +23,13 @@ controlled within 2000. Therefore, GPT 3.5's token limit (4096) is sufficient (n
 
 [43.206.107.75:4000](http://43.206.107.75:4000)
 
+Demo environment is deployed on a cloud server. And **NOT** set the OpenAI token, so it will start mock mode.
+
 ## 📢Update Plan
 
 - [ ] User login
 - [ ] Data persistence storage
-- [ ] Quick deployment script
+- [x] Quick deployment script, uploaded to Docker Hub
 - [ ] Add support for writing long-form fiction scenarios
 
 **Updates will be made as needed.** More updates will be provided if the project is widely used, and updates will be 
@@ -46,32 +48,34 @@ A binary tree with n nodes has a depth of logn. The depth here refers to the con
 GPT API. If we don't process the context, it can be regarded as a one-dimensional tree, which degenerates into a line 
 segment, naturally the most complex case. By organizing the session into a tree structure, we can create a mind map.
 
-## Deployment and Usage
-
-### Environment Notice
-It is recommended to choose a server location in a country or region supported by OpenAI. Data centers and cloud hosts 
+## Environment Notice
+It is recommended to choose a server location in a country or region supported by OpenAI. Data centers and cloud hosts
 are both acceptable, and the following clouds have been tested:
 1. Azure
 2. AWS
 
-If you insist on testing in an unsupported country or region, this project fully supports proxies, but the proxy itself 
-may **affect the experience and pose risks**. See the configuration file Spec.GPT.TransportUrl for the proxy 
+If you insist on testing in an unsupported country or region, this project fully supports proxies, but the proxy itself
+may **affect the experience and pose risks**. See the configuration file Spec.GPT.TransportUrl for the proxy
 configuration details.
 
 The use of proxies is not recommended. Use at your own risk.
 
-### Server Deployment
-
-Ensure that golang 1.18+ is installed and configure.
+## Clone and enter project directory
 
 ```bash
-cd http
-go run http.go # go build http.go && ./http
+git clone https://github.com/finishy1995/effibot.git
+cd effibot
 ```
 
-The default configuration is Mock mode, which means it will not actually call the GPT API but return the user's input 
-as a response. The default REST API port is `4001`, and all configurations can be modified in the 
+## Configuration
+
+The default configuration is Mock mode, which means it will not actually call the GPT API but return the user's input
+as a response. The default REST API port is `4001`, and all configurations can be modified in the
 `http/etc/http-api.yaml` file.
+
+```bash
+vi http/etc/http-api.yaml
+```
 
 ```yaml
 Name: http-api
@@ -90,6 +94,46 @@ Spec:
     MaxToken: 1000 # Max token of OpenAI response, default 1000
 ```
 
+After modifying the file, if you need `One-click deployment` or `container deployment`, please execute the following command
+```bash
+mkdir -p ./effibot_config
+cp http/etc/http-api.yaml ./effibot_config
+```
+
+## One-click deployment
+
+Please ensure that `docker` and `docker-compose` are correctly installed and enabled.
+
+```bash
+docker-compose up -d
+```
+
+Demo client will run on port `4000`, and REST API will run on both ports `4000` and `4001`.
+
+If you don't have `docker-compose`, you can use the following command:
+
+```bash
+docker network create effibot
+docker run -p 4001:4001 -v ./effibot_config:/app/etc --network effibot --name effibot -d finishy/effibot:latest
+docker run -p 4000:4000 --network effibot --name effibot-demo -d finishy/effibot-demo:latest
+```
+
+## Custom Development/Deployment
+
+### Server Development
+
+Ensure that golang 1.18+ is installed and configure.
+
+```bash
+cd http
+go run http.go # go build http.go && ./http
+```
+
+Exit directory
+```bash
+cd ..
+```
+
 ### Container Packaging
 
 ```bash
@@ -105,10 +149,8 @@ docker network create effibot
 ### Container Deployment
 
 ```bash
-mkdir -p /effibot_config
-cp http/etc/http-api.yaml /effibot_config
 # Modify the configuration file as needed, such as adding the OpenAI token and change the log mode to console
-docker run -p 4001:4001 -v /effibot_config:/app/etc --network effibot --name effibot -d effibot:latest
+docker run -p 4001:4001 -v ./effibot_config:/app/etc --network effibot --name effibot -d effibot:latest
 ```
 
 ### Demo Client Container Packaging
@@ -125,9 +167,11 @@ docker run -p 4000:4000 --network effibot --name effibot-demo -d effibot-demo:la
 
 ### Demo Client Development
 
-The Demo client will automatically open at [http://localhost:5173](http://localhost:5173).
+Demo client is developed by Vue.js + Vite + TypeScript, and requires Node.js 14+ environment.
 
 ```bash
 cd demo
 yarn && yarn dev
 ```
+
+Demo client will automatically open at [http://localhost:5173](http://localhost:5173).

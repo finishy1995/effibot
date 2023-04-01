@@ -4,7 +4,7 @@ Port: 4001 # Port of http server, default 4001
 Timeout: 30000 # Timeout of http request, default 30000(ms)
 Log:
   Level: debug
-  Mode: file # Log mode, default console 日志模式，可选 console（命令行输出） 或 file
+  Mode: console # Log mode, default console 日志模式，可选 console（命令行输出） 或 file
   Path: ../logs # Log file path, default ../logs
 Spec:
   GPT:
