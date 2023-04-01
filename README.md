@@ -19,6 +19,10 @@ controlled within 2000. Therefore, GPT 3.5's token limit (4096) is sufficient (n
 > to distinguish the token consumption of the five questions mentioned, but the overall token consumption can be seen as 
 > controllable.
 
+## Demo
+
+[43.206.107.75:4000](http://43.206.107.75:4000)
+
 ## 📢Update Plan
 
 - [ ] User login
