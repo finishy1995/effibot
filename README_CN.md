@@ -85,22 +85,41 @@ Spec:
 ### 容器打包
 
 ```bash
-cd http
-docker build -t effibot:latest Dockerfile .
+docker build -t effibot:latest -f http/Dockerfile .
 ```
 
-### Demo 客户端使用
+### 容器网络桥接（为了和 Demo 客户端连接）
 
-Demo 客户端将自动打开在 [http://localhost:5173](http://localhost:5173)。
+```bash
+docker network create effibot
+```
+
+### 容器部署
+
+```bash
+mkdir -p /effibot_config
+cp http/etc/http-api.yaml /effibot_config
+# Modify the configuration file as needed, such as adding the OpenAI token and change the log mode to console
+docker run -p 4001:4001 -v /effibot_config:/app/etc --network effibot --name effibot -d effibot:latest
+```
+
+### Demo 客户端容器打包
+
+```bash
+docker build -t effibot-demo:latest -f demo/Dockerfile .
+```
+
+### Demo 客户端容器部署
+
+```bash
+docker run -p 4000:4000 --network effibot --name effibot-demo -d effibot-demo:latest
+```
+
+### Demo 客户端开发
+
+The Demo client will automatically open at [http://localhost:5173](http://localhost:5173).
 
 ```bash
 cd demo
 yarn && yarn dev
-```
-
-### Demo 客户端打包
-
-```bash
-cd demo
-yarn build
 ```

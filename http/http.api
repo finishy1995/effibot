@@ -14,10 +14,10 @@ type Response {
 }
 
 type Types {
-	ID     string   `json:"id"` // type id 类型 ID
+	ID     string   `json:"id"`      // type id 类型 ID
 	NextID []string `json:"next_id"` // next type id 下一个类型 ID
-	IsRoot bool     `json:"root"` // is root(means can be set as root node) 是否是根节点（可以作为根节点）
-	Params []string `json:"params"` // params 参数
+	IsRoot bool     `json:"root"`    // is root(means can be set as root node) 是否是根节点（可以作为根节点）
+	Params []string `json:"params"`  // params 参数
 }
 
 type TypesRequest {
@@ -29,8 +29,8 @@ type TypesResponse {
 
 service http-api {
 	@handler HttpHandler
-	get /answer(Request) returns (Response)
+	get /api/answer(Request) returns (Response)
 	
 	@handler TypesHandler
-	get /types(TypesRequest) returns (TypesResponse)
+	get /api/types(TypesRequest) returns (TypesResponse)
 }

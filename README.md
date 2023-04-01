@@ -89,22 +89,41 @@ Spec:
 ### Container Packaging
 
 ```bash
-cd http
-docker build -t effibot:latest Dockerfile .
+docker build -t effibot:latest -f http/Dockerfile .
 ```
 
-### Demo Client Usage
+### Container Network Bridge Create
+
+```bash
+docker network create effibot
+```
+
+### Container Deployment
+
+```bash
+mkdir -p /effibot_config
+cp http/etc/http-api.yaml /effibot_config
+# Modify the configuration file as needed, such as adding the OpenAI token and change the log mode to console
+docker run -p 4001:4001 -v /effibot_config:/app/etc --network effibot --name effibot -d effibot:latest
+```
+
+### Demo Client Container Packaging
+
+```bash
+docker build -t effibot-demo:latest -f demo/Dockerfile .
+```
+
+### Demo Client Container Deployment
+
+```bash
+docker run -p 4000:4000 --network effibot --name effibot-demo -d effibot-demo:latest
+```
+
+### Demo Client Development
 
 The Demo client will automatically open at [http://localhost:5173](http://localhost:5173).
 
 ```bash
 cd demo
 yarn && yarn dev
-```
-
-### Demo Client Packaging
-
-```bash
-cd demo
-yarn build
 ```

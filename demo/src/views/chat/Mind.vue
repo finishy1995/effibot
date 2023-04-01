@@ -402,7 +402,7 @@ methods: {
     }
     this.jm.update_node(selectedNode.id, this.content)
     
-    let url = 'http://192.168.50.32:4001/answer?type_id=' + this.nextrule + '&content=' + this.content.replace(/;/g, '.').replace(/&/g, ' ').replace(/\?/g, '.') + '&p_id=' + pid + '&params=' + this.selectlanguage;
+    let url = '/api/answer?type_id=' + this.nextrule + '&content=' + this.content.replace(/;/g, '.').replace(/&/g, ' ').replace(/\?/g, '.') + '&p_id=' + pid + '&params=' + this.selectlanguage;
     this.fullscreenLoading = true
     axios.get(url)
       .then((data) => {

@@ -2,30 +2,30 @@
 package types
 
 type Request struct {
-	TypeID            string `form:"type_id"`         // 问题类型
-	BeforeParagraphID string `form:"p_id, optional"`  // 上一个关联的会话 ID
-	Content           string `form:"content"`         // 内容
-	Params            string `form:"params,optional"` // 附加参数
+	TypeID            string `form:"type_id"`         // question type id 问题类型
+	BeforeParagraphID string `form:"p_id, optional"`  // before | parent | father answer id 前一个问题的答案 ID
+	Content           string `form:"content"`         // question content 问题内容
+	Params            string `form:"params,optional"` // question params 问题参数
 }
 
 type Response struct {
-	Code       int32  `json:"code"`        // 状态码
-	QuestionID string `json:"question_id"` // 问题 ID
-	AnswerID   string `json:"answer_id"`   // 回答 ID
-	SessionID  string `json:"session_id"`  // 整个会话的 ID
-	Answer     string `json:"answer"`      // 答案
+	Code       int32  `json:"code"`        // code 状态码
+	QuestionID string `json:"question_id"` // question id 问题 ID
+	AnswerID   string `json:"answer_id"`   // answer id 答案 ID
+	SessionID  string `json:"session_id"`  // session id 会话 ID
+	Answer     string `json:"answer"`      // answer 答案
 }
 
 type Types struct {
-	ID     string   `json:"id"`
-	NextID []string `json:"next_id"`
-	IsRoot bool     `json:"root"`
-	Params []string `json:"params"`
+	ID     string   `json:"id"`      // type id 类型 ID
+	NextID []string `json:"next_id"` // next type id 下一个类型 ID
+	IsRoot bool     `json:"root"`    // is root(means can be set as root node) 是否是根节点（可以作为根节点）
+	Params []string `json:"params"`  // params 参数
 }
 
 type TypesRequest struct {
 }
 
 type TypesResponse struct {
-	Types []Types `json:"types"`
+	Types []Types `json:"types"` // types 类型
 }

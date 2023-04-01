@@ -14,12 +14,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/answer",
+				Path:    "/api/answer",
 				Handler: HttpHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/types",
+				Path:    "/api/types",
 				Handler: TypesHandler(serverCtx),
 			},
 		},
