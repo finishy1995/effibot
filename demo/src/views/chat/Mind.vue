@@ -9,19 +9,10 @@
             ref="container"
             >
           </div>
-          
-
         </div>
 
-        <!-- TODO 拖动左右两侧div调整宽度 -->
-        <!-- <div class="resize" title="收缩侧边栏">
-          ⋮
-        </div> -->
-
         <el-container class="answer_layout">
-          <div v-html="answer">
-
-          </div>
+          <div v-html="answer" />
         </el-container>
       </el-main>
     
@@ -30,14 +21,13 @@
           <el-card class="footer-card">
             <div>
             <el-form-item class="footer-card-button">
-              
-              <el-button type="primary" size="large" @click="addBrother">插入平级</el-button>
-              <el-button type="primary" size="large" @click="addChild">插入子级</el-button>
-              <el-button type="primary" size="large" @click="delCard">删除卡片</el-button>
-              <el-button type="primary" size="large" @click="request">确定</el-button>
+              <el-button type="primary" size="large" @click="addBrother">Topic<br/>插入平级</el-button>
+              <el-button type="primary" size="large" @click="addChild">Subtopic<br/>插入子级</el-button>
+              <el-button type="primary" size="large" @click="delCard">Delete<br/>删除节点</el-button>
+              <el-button type="primary" size="large" @click="request">Submit<br/>提交查询</el-button>
             </el-form-item>
             <el-form-item class="form">
-                <el-select v-model="type" :disabled="disabled" @change="typechange" class="m-2" placeholder="请选择查询类别">
+                <el-select v-model="type" :disabled="disabled" @change="typechange" class="m-2" placeholder="Select Scenario 选择场景">
                     <el-option
                     v-for="item in types"
                     :key="item"
@@ -45,7 +35,7 @@
                     :value="item"
                     />
                 </el-select>
-                <el-select v-model="nextrule" :disabled="disablednextrule" class="m-2" placeholder="请选择类型">
+                <el-select v-model="nextrule" :disabled="disablednextrule" class="m-2" placeholder="Select Type 选择类型">
                     <el-option
                     v-for="item in next_rule"
                     :key="item.value"
@@ -53,7 +43,7 @@
                     :value="item.value"
                     />
                 </el-select>
-                <el-select v-show="showlanguage" v-model="selectlanguage" class="m-2" placeholder="请选择程序语言">
+                <el-select v-show="showlanguage" v-model="selectlanguage" class="m-2" placeholder="Select Language 选择程序语言">
                     <el-option
                     v-for="item in language"
                     :key="item.value"
@@ -64,7 +54,7 @@
                 
               </el-form-item>
               <el-form-item class="footer-card-texterea">
-                <el-input v-model="content" :disabled="disabled" type="textarea" @keyup.enter="request" placeholder="在此输入问题，我是富文本,可以多行输入，balabalabala....."/>
+                <el-input v-model="content" :disabled="disabled" type="textarea" @keyup.enter="request" placeholder="Input your question here ..."/>
               </el-form-item>
             </div>
           </el-card>
@@ -118,13 +108,13 @@ return {
       label: 'cmd',
     },
   ],
-  type: "",
+  type: "chat",
   types: ([
     "chat",
     // "Code",
     // "ReadDoc"
   ]),
-  nextrule: "",
+  nextrule: "chat",
   next_rule:[
     {
       value: "",
@@ -225,7 +215,7 @@ methods: {
       }
     }
     else {
-      this.$message.error('请选择卡片')
+      this.$message.error('Please select a node 请选择一个节点')
     }
   },
 
@@ -239,7 +229,7 @@ methods: {
         this.jm.select_node(nodeid);
       }
     } else {
-      this.$message.error('请选择卡片')
+      this.$message.error('Please select a node 请选择一个节点')
     }
   },
 
@@ -253,7 +243,7 @@ methods: {
       // 获取数据
       console.log(this.jm.get_data('node_tree'))
     } else {
-      this.$message.error('请选择卡片')
+      this.$message.error('Please select a node 请选择一个节点')
     }
   },
 
@@ -366,21 +356,21 @@ methods: {
 
     var pid = ""
     if ( selectedNode === null ) {
-      this.$message.error('请选择卡片');
+      this.$message.error('Please select a node 请选择一个节点');
       return;
     }
     if ( this.type === "" ) {
-      this.$message.error('请选择查询类别');
+      this.$message.error('Please select a scenario 请选择一个场景');
       return;
     }
     if ( this.nextrule === "" ) {
-      this.$message.error('请选择类型');
+      this.$message.error('Please select a type 请选择一个类型');
       return;
     }
     if ( selectedNode.answerid != null ) {
       this.answer = selectedNode.answer
       if ( this.content != "" ) {
-        this.$message.error('此节点已经记录问题，请选择其他节点，返回当前节点记录问题')
+        this.$message.error('This node has been used. Please choose another one! 此节点已经记录问题，请选择其他节点')
         this.content = ""
       }
       return
@@ -392,17 +382,17 @@ methods: {
     }
     if ( !selectedNode.isroot ) {
       if ( selectedNode.parent != null && selectedNode.parent.answerid == null ) {
-        this.$message.error('上一节点未记录问题');
+        this.$message.error('Father node has not been used 上一节点未记录问题');
         return
       }
     }
     if ( this.content === "" ) {
-      this.$message.error('请输入你的问题');
+      this.$message.error('Please input your question 请输入你的问题');
       return;
     }
     this.jm.update_node(selectedNode.id, this.content)
     
-    let url = '/api/answer?type_id=' + this.nextrule + '&content=' + this.content.replace(/;/g, '.').replace(/&/g, ' ').replace(/\?/g, '.') + '&p_id=' + pid + '&params=' + this.selectlanguage;
+    let url = 'http://127.0.0.1:4001/api/answer?type_id=' + this.nextrule + '&content=' + this.content.replace(/;/g, '.').replace(/&/g, ' ').replace(/\?/g, '.') + '&p_id=' + pid + '&params=' + this.selectlanguage;
     this.fullscreenLoading = true
     axios.get(url)
       .then((data) => {
@@ -410,13 +400,13 @@ methods: {
         if ( data.data.code === 200 ) {
           selectedNode.answerid = data.data.answer_id
           if ( selectedNode.isroot ) {
-            this.answer = marked("\n## 问题：\n" + this.content + "<br /> <br /> \n## 回答：\n" + data.data.answer + "<br /> <br />")
+            this.answer = marked("\n## Question 问题：\n" + this.content + "<br /> <br /> \n## Answer 回答：\n" + data.data.answer + "<br /> <br />")
           } else {
-            this.answer = marked(selectedNode.parent.answer + "\n## 问题：\n" + this.content + "<br /> <br /> \n## 回答：\n" + data.data.answer + "<br /> <br />")
+            this.answer = marked(selectedNode.parent.answer + "\n## Question 问题：\n" + this.content + "<br /> <br /> \n## Answer 回答：\n" + data.data.answer + "<br /> <br />")
           }
           selectedNode.answer = this.answer
         } else {
-          this.$message.error("非200返回码")
+          this.$message.error("status code not 200 非200返回码")
           console.log(data.data)
           return
         }
