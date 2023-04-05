@@ -1,0 +1,14 @@
+Name: http-api
+Host: 0.0.0.0
+Port: 4001 # Port of http server, default 4001
+Timeout: 30000 # Timeout of http request, default 30000(ms)
+Log:
+  Level: debug
+  Mode: console # Log mode, default console 日志模式，可选 console（命令行输出） 或 file
+  Path: ../logs # Log file path, default ../logs
+Spec:
+  GPT:
+#    Token: "sk-" # Token of OpenAI, will start mock mode if not set. OpenAI 密钥，如果不设置则启用 mock 模式
+#    TransportUrl: "http://localhost:4002" # Transport url of OpenAI, default "http://localhost:4002 代理地址，如果不设置则不启用代理
+    Timeout: 20s # Timeout of OpenAI request, default 20s
+    MaxToken: 1000 # Max token of OpenAI response, default 1000
