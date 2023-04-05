@@ -171,4 +171,83 @@ cd demo
 yarn && yarn dev
 ```
 
-Demo 客户端对自动打开在 [http://localhost:5173](http://localhost:5173).
+Demo 客户端将自动打开在 [http://localhost:5173](http://localhost:5173).
+
+## Windows 测试
+
+推荐在 Windows 中使用自定义开发的方式进行开发/测试，由于部分朋友不会安装开发环境， 所以我们提供如下的测试方式。
+
+如果你想使用下面的方法，可能意味着你对计算机等相关知识了解不够深入，建议 `不要写入 OpenAI token` `不要写入 OpenAI token`
+`不要写入 OpenAI token`，不写入也能启动开发者模式进行测试。对可能存在的账号封禁风险，我们不负任何责任（如果对此有异议，千万不要执行下列步骤）。
+
+### 一、Docker Desktop for Windows
+
+能用 Docker 尽量用 Docker，方便快捷，并且能确保环境一致性。  
+
+可以自行前往 Docker 官网，或 Google/Bing/Baidu 搜索 `Docker Desktop for Windows` 进行安装。
+
+[Docker 官网](https://docs.docker.com/desktop/)
+
+> 1. 如果你的 Windows 版本过低，可能会导致 Docker Desktop for Windows 无法安装。
+> 2. 如果你已经安装了其他虚拟化软件，可能会导致 Docker Desktop for Windows 无法安装。 包括但不限于绝大部分手机模拟器、VMware、VirtualBox、Hyper-V 等。
+> 3. 如果你的电脑设置为禁用虚拟化，可能会导致 Docker Desktop for Windows 无法安装。请详细查看相关教程获取帮助
+
+成功安装后，打开 Docker Desktop
+
+![Docker UI](docs/windows/docker-ui.png)
+
+看到这个页面，说明 Docker Desktop for Windows 已经安装成功。下面我们准备一下配置文件：
+
+![配置文件](docs/windows/config.png)
+
+> 注：老版本可能不直接存在这个文件，需要手动创建文件夹，并创建或复制这个文件。  
+> 配置文件的内容，请参考上述配置介绍进行自定义更改。
+
+在 ***项目根目录*** ，右键打开 Windows Terminal（或是默认的cmd，再或者是 powershell），截图使用 Windows Terminal，可在微软商店免费下载。
+
+![cmd](docs/windows/cmd.png)
+
+键入命令
+
+```bash
+docker-compose up -d
+```
+
+通过 Docker Desktop 确认容器是否启动成功。
+
+![容器](docs/windows/demo-c.png)
+
+浏览器访问 http://localhost:4000 即可看到 Demo 客户端。
+
+### 二、非 Docker 启动
+
+如果你的电脑不支持 Docker Desktop for Windows，或者你不想使用 Docker Desktop for Windows，你可以使用如下的方法进行测试。  
+
+a. 安装 nodejs 环境
+
+从 nodejs 官网下载安装包
+
+[node 官网](https://nodejs.org/zh-cn/)
+
+按照官网给的安装包安装
+
+b. 下载编译好的服务器二进制文件及配置
+
+[下载地址](https://github.com/finishy1995/effibot/releases/download/0.0.1/server_with_data_X86_64.zip)
+
+c. 解压缩 zip 文件，并双击打开服务器执行程序
+
+![服务器地址](docs/windows/server-dir.png)
+
+d. 进入项目下（注意不是 zip 解压后的目录，而是github上的项目），进入 demo 目录
+
+![Demo 目录](docs/windows/demo-dir.png)
+
+e. 右击打开命令行工具，键入命令
+
+```bash
+npm install
+npm run dev
+```
+
+浏览器访问 http://localhost:5173 即可看到 Demo 客户端。
